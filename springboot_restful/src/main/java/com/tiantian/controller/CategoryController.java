@@ -3,9 +3,11 @@ package com.tiantian.controller;
 
 import com.tiantian.entity.Category;
 import com.tiantian.service.CategoryService;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -23,13 +25,12 @@ public class CategoryController {
     @Resource
     private CategoryService categoryService;
 
-    //查询全部信息
+   // 查询全部信息
     @GetMapping("/category")
     public List<Category> list(){
         List<Category> categories = categoryService.queryAll(new Category());
         return categories;
     }
-
 
     //删除
     @DeleteMapping("/category/{id}")
@@ -41,8 +42,12 @@ public class CategoryController {
     //添加
     @PutMapping("/category")
     public String addCategory(Category category){
-        categoryService.insert(category);
 
+        if (category.getId() != null){
+            categoryService.update(category);
+        }else{
+            categoryService.insert(category);
+        }
         return "true";
     }
 
